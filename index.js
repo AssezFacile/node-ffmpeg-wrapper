@@ -1,3 +1,5 @@
-exports.printMsg = function() {
-    console.log("This is a message from the demo package");
+const package = require('./package.json');
+
+exports.version = () => {
+    return package.version;
 }

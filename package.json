@@ -1,10 +1,10 @@
 {
-  "name": "ffmpeg-wrapper",
+  "name": "@assezfacile/ffmpeg-wrapper",
   "version": "0.1.0",
   "description": "Wrapper to simplify some ffmpeg function",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec"
   },
   "keywords": [
     "nodejs",
@@ -12,8 +12,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mickjol/node-ffmpeg-wrapper.git"
+    "url": "git+https://github.com/mickjol/node-ffmpeg-wrapper.git"
   },
   "author": "Michael Jolin",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mickjol/node-ffmpeg-wrapper/issues"
+  },
+  "homepage": "https://github.com/mickjol/node-ffmpeg-wrapper#readme",
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0"
+  }
 }
