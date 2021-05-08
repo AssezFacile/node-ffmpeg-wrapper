@@ -1,35 +1,51 @@
 {
   "name": "@assezfacile/ffmpeg-wrapper",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Wrapper to simplify some ffmpeg function",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha --reporter spec",
-    "publish": "npm publish --access public"
-  },
   "keywords": [
     "nodejs",
     "ffmpeg"
   ],
+  "homepage": "https://github.com/mickjol/node-ffmpeg-wrapper#readme",
+  "bugs": {
+    "url": "https://github.com/mickjol/node-ffmpeg-wrapper/issues"
+  },
+  "license": "ISC",
+  "author": {
+    "name" : "Michael Jolin",
+    "email" : "jolin.michael@gmail.com",
+    "url" : "http://assezfacile.com/"
+  },
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mickjol/node-ffmpeg-wrapper.git"
   },
-  "author": "Michael Jolin",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mickjol/node-ffmpeg-wrapper/issues"
+  "scripts": {
+    "test": "mocha --reporter spec",
+    "push": "npm publish"
   },
-  "homepage": "https://github.com/mickjol/node-ffmpeg-wrapper#readme",
-  "directories": {
-    "test": "tests"
+  "dependencies": {
+    "fs": "",
+    "path": "",
+    "child_process": "",
+    "any-shell-escape": "^0.1.1"
   },
   "devDependencies": {
     "chai": "^4.3.4",
     "mocha": "^8.4.0",
     "proxyquire": "^2.1.3"
   },
-  "dependencies": {
-    "any-shell-escape": "^0.1.1"
+  "engines": {
+    "node": ">=12",
+    "npm": ">=6.14"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }
