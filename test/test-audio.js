@@ -21,7 +21,7 @@ describe('audio', () => {
     describe('when building a ffmpeg command to convert audio codec', () => {
         const aCodec = 'pcm_s16le';
         const aChannels = 1;
-        const aSamplingRate = 8000;
+        const aRate = 8000;
         const aBitrate = 128000;
 
         it('with all source value should return an array with 7 string', () => {
@@ -43,28 +43,8 @@ describe('audio', () => {
             assert.strictEqual(command[8], aDestinationFile);
         });
 
-        it('with a new channels value should return an array with 9 string', () => {
-            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, null, aChannels);
-
-            assert.strictEqual(command.length, 9);
-            assert.strictEqual(command[0], 'ffmpeg');
-            assert.strictEqual(command[5], aSourceFile);
-            assert.strictEqual(command[7], aChannels);
-            assert.strictEqual(command[8], aDestinationFile);
-        });
-
-        it('with a new sampling rate value should return an array with 9 string', () => {
-            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, null, null, aSamplingRate);
-
-            assert.strictEqual(command.length, 9);
-            assert.strictEqual(command[0], 'ffmpeg');
-            assert.strictEqual(command[5], aSourceFile);
-            assert.strictEqual(command[7], aSamplingRate);
-            assert.strictEqual(command[8], aDestinationFile);
-        });
-
         it('with a new bitrate value should return an array with 9 string', () => {
-            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, null, null, null, aBitrate);
+            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, null, aBitrate);
 
             assert.strictEqual(command.length, 9);
             assert.strictEqual(command[0], 'ffmpeg');
@@ -73,15 +53,35 @@ describe('audio', () => {
             assert.strictEqual(command[8], aDestinationFile);
         });
 
+        it('with a new sampling rate value should return an array with 9 string', () => {
+            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, null, null, aRate);
+
+            assert.strictEqual(command.length, 9);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[7], aRate);
+            assert.strictEqual(command[8], aDestinationFile);
+        });
+
+        it('with a new channels value should return an array with 9 string', () => {
+            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, null, null, null, aChannels);
+
+            assert.strictEqual(command.length, 9);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[7], aChannels);
+            assert.strictEqual(command[8], aDestinationFile);
+        });
+
         it('with all new value should return an array with 15 string', () => {
-            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, aCodec, aSamplingRate, aBitrate, aChannels);
+            const command = convertCodecShellCommand(aSourceFile, aDestinationFile, aCodec, aBitrate, aRate, aChannels);
 
             assert.strictEqual(command.length, 15);
             assert.strictEqual(command[0], 'ffmpeg');
             assert.strictEqual(command[5], aSourceFile);
             assert.strictEqual(command[7], aCodec);
-            assert.strictEqual(command[9], aSamplingRate);
-            assert.strictEqual(command[11], aBitrate);
+            assert.strictEqual(command[9], aBitrate);
+            assert.strictEqual(command[11], aRate);
             assert.strictEqual(command[13], aChannels);
             assert.strictEqual(command[14], aDestinationFile);
         });

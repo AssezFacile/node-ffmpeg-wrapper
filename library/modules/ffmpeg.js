@@ -3,6 +3,7 @@ const path = require('path');
 const execution = require('./shell-execution');
 const fileInformation = require('./file-information');
 const audio = require('./audio');
+const video = require('./video');
 
 class FFmpeg {
     constructor(filePath) {
@@ -51,7 +52,7 @@ class FFmpeg {
         return new FFmpeg(`${this.directory}/${temporaryName}`);
     }
 
-    async convertAudio(extension = null, codec = null, samplingRate = null, bitrate = null, channels = null) {
+    async convertAudio(extension = null, codec = null, bitrate = null, rate = null, channels = null) {
         if (extension && extension.indexOf('.') !== 0) {
             throw new Error('extension should start with "."');
         }
@@ -59,7 +60,38 @@ class FFmpeg {
         const temporaryName = this._generateTemporaryName(extension);
         const command = audio.convertCodecShellCommand(
             this.source, `${this.directory}/${temporaryName}`,
-            codec, samplingRate, bitrate, channels
+            codec, bitrate, rate, channels
+        );
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`);
+    }
+
+    async convertAudioToStandardTelephonyFormat() {
+        return await this.convertAudio('.wav', 'pcm_s16le', null, 8000, 1);
+    }
+
+    async convertAudioToStandardWaveFormat() {
+        return await this.convertAudio('.wav', 'pcm_u8');
+    }
+
+    async convertAudioToStandardFlacFormat() {
+        return await this.convertAudio('.flac', 'flac');
+    }
+
+    async convertAudioToStandardOggFormat() {
+        return await this.convertAudio('.ogg', 'libvorbis');
+    }
+
+    async convertVideo(extension = null, codec = null, bitrate = null) {
+        if (extension && extension.indexOf('.') !== 0) {
+            throw new Error('extension should start with "."');
+        }
+
+        const temporaryName = this._generateTemporaryName(extension);
+        const command = video.convertCodecShellCommand(
+            this.source, `${this.directory}/${temporaryName}`,
+            codec, bitrate
         );
         await execution.execute(command);
 

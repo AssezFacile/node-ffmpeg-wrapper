@@ -8,16 +8,16 @@ exports.volumeShellCommand = (srcPathFile, destPathFile, volume) => {
     ];
 };
 
-exports.convertCodecShellCommand = (srcPathFile, destPathFile, codec, samplingRate, bitrate, channels) => {
+exports.convertCodecShellCommand = (srcPathFile, destPathFile, codec, bitrate, rate, channels) => {
     const commands = [
         'ffmpeg', '-y', '-v', 'error',
         '-i', srcPathFile,
         destPathFile
     ];
 
-    if (codec) commands.splice(-1, 0, '-acodec', codec);
-    if (samplingRate) commands.splice(-1, 0, '-ar', samplingRate);
+    if (codec) commands.splice(-1, 0, '-c:a', codec);
     if (bitrate) commands.splice(-1, 0, '-b:a', bitrate);
+    if (rate) commands.splice(-1, 0, '-ar', rate);
     if (channels) commands.splice(-1, 0, '-ac', channels);
 
     return commands;
