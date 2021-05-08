@@ -26,5 +26,8 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "mocha": "^8.4.0"
+  },
+  "dependencies": {
+    "any-shell-escape": "^0.1.1"
   }
 }
