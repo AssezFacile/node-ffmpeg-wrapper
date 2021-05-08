@@ -2,7 +2,7 @@ class AudioInformation {
     stream = '';
     codec = '';
     bitrate = '';
-    sampleRate = '';
+    samplingRate = '';
     channels = '';
 
     constructor() { }

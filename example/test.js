@@ -36,3 +36,9 @@ new FFmpeg(file).setVolume(2).then((infos) => {
     console.log(infos);
 });
 */
+
+/* Convert audio *//*
+new FFmpeg(file).convertAudio('.wav', 'pcm_s16le', 8000, 128000, 1).then((infos) => {
+    console.log(infos);
+});
+*/

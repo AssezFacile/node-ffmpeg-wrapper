@@ -41,7 +41,7 @@ exports.convertShellInformation = (info) => {
             stream: extractInfo(info, /Stream #([0-9\.]+)([a-z0-9\(\)\[\]]*)[:] Audio/),
             codec: extractInfo(info, /Audio: ([\w]+)/),
             bitrate: extractInfo(info, /Audio:.* ([0-9]+) kb\/s/, 'kb/s'),
-            sampleRate: extractInfo(info, /([0-9]+) Hz/i, 'Hz'),
+            samplingRate: extractInfo(info, /([0-9]+) Hz/i, 'Hz'),
             channels: extractInfo(info, /Audio:.* (stereo|mono)/)
         })
     });

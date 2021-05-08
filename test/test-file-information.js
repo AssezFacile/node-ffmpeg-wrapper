@@ -55,7 +55,7 @@ Duration: 00:04:58.89, start: 0.000000, bitrate: 900 kb/s
 describe('file information', () => {
     const aFfProbeCommand = ['ffprobe', '-i', 'test.mp3'];
 
-    describe('building a ffprobe command', () => {
+    describe('when building a ffprobe command', () => {
         it('should return an array with 3 string and filename as third string', () => {
             const command = buildShellCommand(anAudioFile);
 
@@ -66,7 +66,7 @@ describe('file information', () => {
         });
     });
 
-    describe('get all for audio file', () => {
+    describe('when get all information for audio file', () => {
         const execute = () => Promise.resolve(anAudioFfProbeResult);
 
         it('should return an instance of FileInformation', async () => {
@@ -91,7 +91,7 @@ describe('file information', () => {
         });
     });
 
-    describe('get all for video file', () => {
+    describe('when get all information for video file', () => {
         const execute = () => Promise.resolve(aVideoFfProbeResult);
 
         it('should return an instance of FileInformation', async () => {

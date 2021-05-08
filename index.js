@@ -1,5 +1,5 @@
 const generic = require('./library/modules/generic');
-const { FFmpeg } = require('./library/models/ffmpeg');
+const { FFmpeg } = require('./library/modules/ffmpeg');
 const { FileInformation, AudioInformation, VideoInformation } = require('./library/models/file-information');
 
 exports.ffmpeg = {

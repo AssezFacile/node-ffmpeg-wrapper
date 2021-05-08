@@ -1,8 +1,12 @@
-const { version, requirements } = require('../library/modules/generic');
-const { assert } = require('chai');
+const execution = {};
+
+const { assert, expect } = require('chai');
+const { version, requirements } = require('proxyquire')('../library/modules/generic', {
+    './shell-execution': execution
+});
 
 describe('generic', () => {
-    describe('get package version', () => {
+    describe('when get package version', () => {
         it('should return a string with 3 number', () => {
             const aVersion = version();
 
@@ -10,11 +14,19 @@ describe('generic', () => {
         });
     });
 
-    describe('check all requirements', () => {
-        it('should return true', () => {
-            const success = requirements();
+    describe('when check all requirements', () => {
+        it('with all dependencies should not throw error', async () => {
+            execution.execute = () => Promise.resolve('ok');
 
-            assert.strictEqual(success, true);
+            await expect(requirements).not.to.throw();
+        });
+
+        it('with missing dependencies should throw error', (done) => {
+            execution.execute = () => Promise.reject(new Error());
+
+            requirements().then(() => {
+                done(new Error('Expected method to be rejected'));
+            }).catch(() => done());
         });
     });
 });
