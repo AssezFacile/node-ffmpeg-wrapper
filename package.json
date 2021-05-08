@@ -4,7 +4,8 @@
   "description": "Wrapper to simplify some ffmpeg function",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "publish": "npm publish --access public"
   },
   "keywords": [
     "nodejs",
