@@ -1,17 +1,11 @@
 const fs = {};
-const path = {};
 const execution = {};
-const fileInformation = {};
-const audio = {};
 
 const { assert, expect } = require('chai');
 const { FileInformation } = require('../library/models/file-information');
 const { FFmpeg } = require('proxyquire')('../library/modules/ffmpeg', {
     'fs': fs,
-    'path': path,
     './shell-execution': execution,
-    './file-information': fileInformation,
-    './audio': audio
 });
 
 const aAudioFile = 'test.wav';
@@ -67,6 +61,72 @@ describe('ffmpeg', () => {
             const fileInformation = await ffmpeg.getFileInformation();
 
             assert.instanceOf(fileInformation, FileInformation);
+        });
+    });
+
+    describe('when save is executed', () => {
+        it('with output file should return the output file path', (done) => {
+            const aOutputFile = 'output.webm';
+            fs.existsSync = () => true;
+            fs.rename = (file, output, callback) => { callback(); };
+            
+            new FFmpeg(aVideoFile).save(aOutputFile).then((filePath) => {
+                assert.strictEqual(aOutputFile, filePath);
+                done();
+            }).catch(() => {
+                done(new Error('Expected method to be accepted'));
+            });
+        });
+
+        it('without output file should return the output file path', (done) => {
+            fs.existsSync = () => true;
+            fs.rename = (file, output, callback) => { callback(); };
+            
+            new FFmpeg(aVideoFile).save().then((filePath) => {
+                assert.strictEqual(aVideoFile, filePath);
+                done();
+            }).catch(() => {
+                done(new Error('Expected method to be accepted'));
+            });
+        });
+
+        it('with error from fs.rename should return an error', (done) => {
+            fs.existsSync = () => true;
+            fs.rename = (file, output, callback) => { callback('File cannot be save'); };
+            
+            new FFmpeg(aVideoFile).save().then((filePath) => {
+                done(new Error('Expected method to be rejected'));
+            }).catch(() => {
+                done();
+            });
+        });
+    });
+
+    describe('when multiple is executed', () => {
+        it('should execute all method', (done) => {
+            fs.existsSync = () => true;
+            fs.rename = (file, output, callback) => { callback(); };
+            
+            new FFmpeg(aVideoFile).multiple(
+                ['convertAudioToStandardOggFormat'],
+                ['convertVideo', '.webm'],
+                ['save']
+            ).then((filePath) => {
+                assert.strictEqual(filePath, aVideoFile);
+                done();
+            }).catch(() => {
+                done(new Error('Expected method to be accepted'));
+            });
+        });
+    });
+
+    describe('when custom command is executed', () => {
+        it('should return an instance of FFmpeg', async () => {
+            const aCommand = ['ffmpeg', '-i', 'test.mp4', 'test.webm'];
+            const ffmpeg = new FFmpeg(aVideoFile);
+            const result = await ffmpeg.executeCustomCommand(aCommand);
+
+            assert.instanceOf(result, FFmpeg);
         });
     });
 

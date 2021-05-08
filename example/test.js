@@ -56,8 +56,18 @@ new FFmpeg(video).convertVideo('.mkv', 'vp9', '300k', 30).then((infos) => {
 });
 */
 
-/* Convert video *//**/
+/* Convert video *//*
 new FFmpeg(video).convertVideo('.webm').then((infos) => {
     console.log(infos);
 });
+*/
 
+/* Convert video and audio *//*
+new FFmpeg(video).multiple(
+    ['convertVideo', '.mkv'],
+    ['convertAudioToStandardOggFormat'],
+    ['save', `${__dirname}/output.mkv`]
+).then((infos) => {
+    console.log(infos);
+});
+*/

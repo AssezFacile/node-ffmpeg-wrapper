@@ -6,21 +6,33 @@ const audio = require('./audio');
 const video = require('./video');
 
 class FFmpeg {
-    constructor(filePath) {
+    constructor(filePath, original = null) {
         if (!fs.existsSync(filePath)) throw new Error('Your file does not exist');
 
         this.source = filePath;
+        this.original = original || filePath;
         this.directory = path.dirname(filePath);
         this.extension = path.extname(filePath);
+        this.originalPath = this.original.replace(/\/|:|\\/ig, '-');
+        this.temporaryPrefix = `.ffmpeg-wrapper_${this.originalPath}_`;
     }
 
     _generateTemporaryName(extension = null) {
-        return `${(new Date()).getTime()}${(extension || this.extension)}`;
+        return `${this.temporaryPrefix}${(new Date()).getTime()}${(extension || this.extension)}`;
+    }
+
+    _deleteTemporaryFiles() {
+        const files = fs.readdirSync(this.directory).filter(file => file.indexOf(this.temporaryPrefix) > -1);
+        
+        for (let i = 0, j = files.length; i < j; i++) {
+            fs.unlinkSync(`${this.directory}/${files[i]}`);
+        }
     }
 
     async getFileInformation() {
         const command = fileInformation.buildShellCommand(this.source);
         const result = await execution.execute(command);
+
         return fileInformation.convertShellInformation(result);
     }
     
@@ -40,6 +52,46 @@ class FFmpeg {
         return infos.video;
     }
 
+    async save(filePath = null) {
+        return new Promise((resolve, reject) => {
+            fs.rename(this.source, filePath || this.original, async (error) => {
+                if (error) reject(error);
+                else  {
+                    this._deleteTemporaryFiles();
+                    resolve(filePath || this.original);
+                }
+            });
+        });
+    }
+
+    async multiple(...parameters) {
+        let activeFFmpeg = this;
+
+        for (let i = 0, j = parameters.length; i < j; i++) {
+            const command = parameters[i][0];
+            const argument = parameters[i].splice(1, parameters[i].length);
+
+            activeFFmpeg = await activeFFmpeg[command](...argument);
+        }
+
+        return activeFFmpeg;
+    }
+
+    async executeCustomCommand(command = []) {
+        if (!Array.isArray(command)) {
+            throw new Error('pass an array with all parameter of the command line : ["ffmpeg", "-i", "file.mp3", "file.wav"]');
+        }
+
+        const temporaryName = command[command.length - 1];
+        if (temporaryName && temporaryName.indexOf('.') === -1) {
+            throw new Error('last item in array should be the output file path');
+        }
+
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
+    }
+
     async setVolume(levelVolume) {
         if (typeof(levelVolume) !== 'number') {
             throw new Error('level volume should be a number');
@@ -49,7 +101,7 @@ class FFmpeg {
         const command = audio.volumeShellCommand(this.source, `${this.directory}/${temporaryName}`, levelVolume);
         await execution.execute(command);
 
-        return new FFmpeg(`${this.directory}/${temporaryName}`);
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
     }
 
     async convertAudio(extension = null, codec = null, bitrate = null, rate = null, channels = null) {
@@ -64,7 +116,7 @@ class FFmpeg {
         );
         await execution.execute(command);
 
-        return new FFmpeg(`${this.directory}/${temporaryName}`);
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
     }
 
     async convertAudioToStandardTelephonyFormat() {
@@ -95,7 +147,7 @@ class FFmpeg {
         );
         await execution.execute(command);
 
-        return new FFmpeg(`${this.directory}/${temporaryName}`);
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
     }
 }
 
