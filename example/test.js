@@ -62,6 +62,30 @@ new FFmpeg(video).convertVideo('.webm').then((infos) => {
 });
 */
 
+/* Size video size *//*
+new FFmpeg(video).changeSize('1280x720').then((infos) => {
+    console.log(infos);
+});
+*/
+
+/* Extract part of video *//*
+new FFmpeg(video).extractPart('00:00:30', 10).then((infos) => {
+    console.log(infos);
+});
+*/
+
+/* Remove audio from video *//*
+new FFmpeg(video).removeAudio().then((infos) => {
+    console.log(infos);
+});
+*/
+
+/* Remove video from video *//**/
+new FFmpeg(video).removeVideo().then((infos) => {
+    console.log(infos);
+});
+
+
 /* Convert video and audio *//*
 new FFmpeg(video).multiple(
     ['convertVideo', '.mkv'],

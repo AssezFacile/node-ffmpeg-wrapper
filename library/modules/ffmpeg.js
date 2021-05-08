@@ -135,6 +135,10 @@ class FFmpeg {
         return await this.convertAudio('.ogg', 'libvorbis');
     }
 
+    async convertAudioToStandardMp3Format() {
+        return await this.convertAudio('.mp3', 'libmp3lame');
+    }
+
     async convertVideo(extension = null, codec = null, bitrate = null) {
         if (extension && extension.indexOf('.') !== 0) {
             throw new Error('extension should start with "."');
@@ -144,6 +148,46 @@ class FFmpeg {
         const command = video.convertCodecShellCommand(
             this.source, `${this.directory}/${temporaryName}`,
             codec, bitrate
+        );
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
+    }
+
+    async changeSize(size) {
+        const temporaryName = this._generateTemporaryName();
+        const command = video.changeSizeShellCommand(
+            this.source, `${this.directory}/${temporaryName}`, size
+        );
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
+    }
+
+    async extractPart(startingTime, duration) {
+        const temporaryName = this._generateTemporaryName();
+        const command = video.extractShellCommand(
+            this.source, `${this.directory}/${temporaryName}`, startingTime, duration
+        );
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
+    }
+
+    async removeAudio() {
+        const temporaryName = this._generateTemporaryName();
+        const command = video.removeAudioShellCommand(
+            this.source, `${this.directory}/${temporaryName}`
+        );
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
+    }
+
+    async removeVideo() {
+        const temporaryName = this._generateTemporaryName('.mp3');
+        const command = audio.removeVideoShellCommand(
+            this.source, `${this.directory}/${temporaryName}`, 'libmp3lame'
         );
         await execution.execute(command);
 

@@ -12,3 +12,32 @@ exports.convertCodecShellCommand = (srcPathFile, destPathFile, codec, bitrate, r
 
     return commands;
 };
+
+exports.changeSizeShellCommand = (srcPathFile, destPathFile, size) => {
+    return [
+        'ffmpeg', '-y', '-v', 'error',
+        '-i', srcPathFile,
+        '-c:a', 'copy',
+        '-s', size,
+        destPathFile
+    ];
+};
+
+exports.extractShellCommand = (srcPathFile, destPathFile, startingTime, duration) => {
+    return [
+        'ffmpeg', '-y', '-v', 'error',
+        '-i', srcPathFile,
+        '-c:v', 'copy', '-c:a', 'copy',
+        '-ss', startingTime, '-t', duration,
+        destPathFile
+    ];
+};
+
+exports.removeAudioShellCommand = (srcPathFile, destPathFile) => {
+    return [
+        'ffmpeg', '-y', '-v', 'error',
+        '-i', srcPathFile,
+        '-an', '-sn',
+        destPathFile
+    ];
+};

@@ -1,4 +1,7 @@
-const { volumeShellCommand, convertCodecShellCommand } = require('../library/modules/video');
+const {
+    convertCodecShellCommand, changeSizeShellCommand,
+    extractShellCommand, removeAudioShellCommand
+} = require('../library/modules/video');
 const { assert } = require('chai');
 
 const aSourceFile = 'test.mp4';
@@ -59,6 +62,45 @@ describe('video', () => {
             assert.strictEqual(command[9], aBitrate);
             assert.strictEqual(command[11], aRate);
             assert.strictEqual(command[12], aDestinationFile);
+        });
+    });
+
+    describe('when building a ffmpeg command to change video size', () => {
+        it('with all source value should return an array with 11 string', () => {
+            const aSize = 'hd720';
+            const command = changeSizeShellCommand(aSourceFile, aDestinationFile, aSize);
+
+            assert.strictEqual(command.length, 11);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[9], aSize);
+            assert.strictEqual(command[10], aDestinationFile);
+        });
+    });
+
+    describe('when building a ffmpeg command to extract part of video', () => {
+        it('with all source value should return an array with 15 string', () => {
+            const aStartingTime = '00:01:00';
+            const aDuration = 60;
+            const command = extractShellCommand(aSourceFile, aDestinationFile, aStartingTime, aDuration);
+
+            assert.strictEqual(command.length, 15);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[11], aStartingTime);
+            assert.strictEqual(command[13], aDuration);
+            assert.strictEqual(command[14], aDestinationFile);
+        });
+    });
+
+    describe('when building a ffmpeg command to keep only video', () => {
+        it('with all source value should return an array with 9 string', () => {
+            const command = removeAudioShellCommand(aSourceFile, aDestinationFile);
+
+            assert.strictEqual(command.length, 9);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[8], aDestinationFile);
         });
     });
 });

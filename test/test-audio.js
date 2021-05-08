@@ -1,23 +1,13 @@
-const { volumeShellCommand, convertCodecShellCommand } = require('../library/modules/audio');
+const {
+    volumeShellCommand, convertCodecShellCommand,
+    removeVideoShellCommand
+} = require('../library/modules/audio');
 const { assert } = require('chai');
 
 const aSourceFile = 'test.wav';
 const aDestinationFile = 'convert.wav';
 
 describe('audio', () => {
-    describe('when building a ffmpeg command to set volume', () => {
-        it('should return an array with 9 string', () => {
-            const aVolume = 2;
-            const command = volumeShellCommand(aSourceFile, aDestinationFile, aVolume);
-
-            assert.strictEqual(command.length, 9);
-            assert.strictEqual(command[0], 'ffmpeg');
-            assert.strictEqual(command[5], aSourceFile);
-            assert.strictEqual(command[7], `volume=${aVolume}`);
-            assert.strictEqual(command[8], aDestinationFile);
-        });
-    });
-
     describe('when building a ffmpeg command to convert audio codec', () => {
         const aCodec = 'pcm_s16le';
         const aChannels = 1;
@@ -84,6 +74,32 @@ describe('audio', () => {
             assert.strictEqual(command[11], aRate);
             assert.strictEqual(command[13], aChannels);
             assert.strictEqual(command[14], aDestinationFile);
+        });
+    });
+
+    describe('when building a ffmpeg command to set volume', () => {
+        it('should return an array with 9 string', () => {
+            const aVolume = 2;
+            const command = volumeShellCommand(aSourceFile, aDestinationFile, aVolume);
+
+            assert.strictEqual(command.length, 9);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[7], `volume=${aVolume}`);
+            assert.strictEqual(command[8], aDestinationFile);
+        });
+    });
+
+    describe('when building a ffmpeg command to keep only audio', () => {
+        it('with all source value should return an array with 10 string', () => {
+            const aCodec = 'libmp3lame';
+            const command = removeVideoShellCommand(aSourceFile, aDestinationFile, aCodec);
+
+            assert.strictEqual(command.length, 10);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[7], aCodec);
+            assert.strictEqual(command[9], aDestinationFile);
         });
     });
 });

@@ -184,10 +184,70 @@ describe('ffmpeg', () => {
 
         it('should return an instance of FFmpeg', async () => {
             const ffmpeg = new FFmpeg(aVideoFile);
-            const result = await ffmpeg.convertAudio(anExtension);
+            const result = await ffmpeg.convertVideo(anExtension);
 
             assert.instanceOf(result, FFmpeg);
             assert.strictEqual(result.source.indexOf(anExtension) > -1, true);
+        });
+    });
+
+    describe('when change video size', () => {
+        beforeEach(() => {
+            fs.existsSync = () => true;
+            execution.execute = () => Promise.resolve('ok');
+        });
+
+        it('should return an instance of FFmpeg', async () => {
+            const aSize = 'hd720';
+            const ffmpeg = new FFmpeg(aVideoFile);
+            const result = await ffmpeg.changeSize(aSize);
+
+            assert.instanceOf(result, FFmpeg);
+        });
+    });
+
+    describe('when extracting part of video', () => {
+        beforeEach(() => {
+            fs.existsSync = () => true;
+            execution.execute = () => Promise.resolve('ok');
+        });
+
+        it('should return an instance of FFmpeg', async () => {
+            const aStartingTime = '00:01:00';
+            const aDuration = 10;
+            const ffmpeg = new FFmpeg(aVideoFile);
+            const result = await ffmpeg.extractPart(aStartingTime, aDuration);
+
+            assert.instanceOf(result, FFmpeg);
+        });
+    });
+
+    describe('when removing audio', () => {
+        beforeEach(() => {
+            fs.existsSync = () => true;
+            execution.execute = () => Promise.resolve('ok');
+        });
+
+        it('should return an instance of FFmpeg', async () => {
+            const ffmpeg = new FFmpeg(aVideoFile);
+            const result = await ffmpeg.removeAudio();
+
+            assert.instanceOf(result, FFmpeg);
+        });
+    });
+
+    describe('when removing video', () => {
+        beforeEach(() => {
+            fs.existsSync = () => true;
+            execution.execute = () => Promise.resolve('ok');
+        });
+
+        it('should return an instance of FFmpeg', async () => {
+            const ffmpeg = new FFmpeg(aVideoFile);
+            const result = await ffmpeg.removeVideo();
+
+            assert.instanceOf(result, FFmpeg);
+            assert.strictEqual(result.source.indexOf('.mp3') > -1, true);
         });
     });
 });
