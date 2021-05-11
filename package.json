@@ -1,6 +1,6 @@
 {
   "name": "@assezfacile/ffmpeg-wrapper",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Wrapper to simplify some ffmpeg function",
   "keywords": [
     "nodejs",

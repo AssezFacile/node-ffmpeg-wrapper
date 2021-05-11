@@ -1,0 +1,18 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "Example project",
+  "license": "ISC",
+  "author": {
+    "name": "Michael Jolin",
+    "email": "jolin.michael@gmail.com",
+    "url": "http://assezfacile.com/"
+  },
+  "main": "example.js",
+  "scripts": {
+    "start": "node test.js"
+  },
+  "dependencies": {
+    "@assezfacile/ffmpeg-wrapper": "^1.0.0"
+  }
+}

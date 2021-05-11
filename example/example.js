@@ -1,4 +1,9 @@
-const { ffmpeg, FFmpeg } = require('../index');
+// Uncomment to test the local library
+//const { ffmpeg, FFmpeg } = require('../index');
+// Uncomment to test the repository library
+const { ffmpeg, FFmpeg } = require('@assezfacile/ffmpeg-wrapper');
+
+// Finally, uncomment the method you want to try
 const audio = `${__dirname}/audio.mp3`;
 const video = `${__dirname}/video.mp4`;
 
@@ -24,7 +29,7 @@ ffmpeg.instance(video).getFileInformation().then((infos) => {
 ffmpeg.instance(audio).getAudioInformation().then((infos) => {
     console.log(infos);
 });
-*/
+/*
 
 /* Get video information of file *//*
 new FFmpeg(audio).getVideoInformation().then((infos) => {
@@ -80,11 +85,11 @@ new FFmpeg(video).removeAudio().then((infos) => {
 });
 */
 
-/* Remove video from video *//**/
+/* Remove video from video *//*
 new FFmpeg(video).removeVideo().then((infos) => {
     console.log(infos);
 });
-
+*/
 
 /* Convert video and audio *//*
 new FFmpeg(video).multiple(
