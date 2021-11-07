@@ -1,6 +1,6 @@
 {
   "name": "@assezfacile/ffmpeg-wrapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrapper to simplify some ffmpeg function",
   "keywords": [
     "nodejs",
@@ -12,9 +12,9 @@
   },
   "license": "ISC",
   "author": {
-    "name" : "Michael Jolin",
-    "email" : "jolin.michael@gmail.com",
-    "url" : "http://assezfacile.com/"
+    "name": "Michael Jolin",
+    "email": "jolin.michael@gmail.com",
+    "url": "http://assezfacile.com/"
   },
   "main": "index.js",
   "repository": {
@@ -34,8 +34,8 @@
     "proxyquire": "^2.1.3"
   },
   "engines": {
-    "node": ">=12",
-    "npm": ">=6.14"
+    "node": ">=14",
+    "npm": ">=7"
   },
   "publishConfig": {
     "access": "public"

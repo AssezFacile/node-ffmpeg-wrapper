@@ -1,4 +1,4 @@
-# node-ffmpeg-wrapper
+# @assezfacile/ffmpeg-wrapper
 NodeJS wrapper to simplify some ffmpeg function
 
 ### Install
