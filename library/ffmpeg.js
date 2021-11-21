@@ -1,11 +1,21 @@
 const fs = require('fs');
 const path = require('path');
-const execution = require('./shell-execution');
-const fileInformation = require('./file-information');
-const audio = require('./audio');
-const video = require('./video');
+const execution = require('./modules/shell-execution');
+const fileInformation = require('./modules/file-information');
+const file = require('./modules/file');
+const image = require('./modules/image');
+const audio = require('./modules/audio');
+const video = require('./modules/video');
+const { basename } = require('path');
 
 class FFmpeg {
+    _watermarkPosition = {
+        'top-left': 'overlay=5:5',
+        'top-right': 'overlay=W-w-5:5',
+        'bottom-left': 'overlay=5:H-h-5',
+        'bottom-right': 'overlay=W-w-5:H-h-5',
+    };
+
     constructor(filePath, original = null) {
         if (!fs.existsSync(filePath)) throw new Error('Your file does not exist');
 
@@ -27,6 +37,18 @@ class FFmpeg {
         for (let i = 0, j = files.length; i < j; i++) {
             fs.unlinkSync(`${this.directory}/${files[i]}`);
         }
+    }
+
+    _convertSizeToString(size) {
+        if (!size) {
+            return size;
+        } else if (Array.isArray(size)) {
+            return size.join('x');
+        } else if (typeof(size) === 'object') {
+            return `${size.width || ''}x${size.height || ''}`;
+        }
+
+        return size;
     }
 
     async getFileInformation() {
@@ -157,7 +179,7 @@ class FFmpeg {
     async changeSize(size) {
         const temporaryName = this._generateTemporaryName();
         const command = video.changeSizeShellCommand(
-            this.source, `${this.directory}/${temporaryName}`, size
+            this.source, `${this.directory}/${temporaryName}`, this._convertSizeToString(size)
         );
         await execution.execute(command);
 
@@ -188,6 +210,37 @@ class FFmpeg {
         const temporaryName = this._generateTemporaryName('.mp3');
         const command = audio.removeVideoShellCommand(
             this.source, `${this.directory}/${temporaryName}`, 'libmp3lame'
+        );
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
+    }
+
+    async setIcon(icon) {
+        const temporaryName = this._generateTemporaryName();
+        const command = file.setIconShellCommand(
+            this.source, `${this.directory}/${temporaryName}`, icon
+        );
+        await execution.execute(command);
+
+        return new FFmpeg(`${this.directory}/${temporaryName}`, this.original);
+    }
+
+    async setWatermark(logo, position, size) {
+        position = position || 'bottom-right';
+        size = this._convertSizeToString(size);
+        if (size) {
+            const name = basename(logo);
+            const resizedLogo = `${this.temporaryPrefix}${(new Date()).getTime()}${name}`;
+            if (await image.changeSize(logo, resizedLogo, size)) {
+                logo = resizedLogo;
+            }
+        }
+
+        const temporaryName = this._generateTemporaryName();
+        const command = video.setWatermarkShellCommand(
+            this.source, `${this.directory}/${temporaryName}`,
+            logo, this._watermarkPosition[position]
         );
         await execution.execute(command);
 

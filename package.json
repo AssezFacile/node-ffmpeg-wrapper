@@ -1,6 +1,6 @@
 {
   "name": "@assezfacile/ffmpeg-wrapper",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Wrapper to simplify some ffmpeg function",
   "keywords": [
     "nodejs",
@@ -22,11 +22,12 @@
     "url": "git+https://github.com/mickjol/node-ffmpeg-wrapper.git"
   },
   "scripts": {
-    "test": "mocha --reporter spec",
+    "test": "mocha ./library/*.spec.js ./library/**/*.spec.js",
     "push": "npm publish"
   },
   "dependencies": {
-    "any-shell-escape": "^0.1.1"
+    "any-shell-escape": "^0.1.1",
+    "sharp": "^0.29.3"
   },
   "devDependencies": {
     "chai": "^4.3.4",

@@ -12,4 +12,5 @@ new FFmpeg(sourcefile).getFileInformation().then(info => {
     console.log(info);
 });
 ```
+
 more detail in [example](./example/README.md)

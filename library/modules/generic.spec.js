@@ -1,7 +1,6 @@
 const execution = {};
-
 const { assert, expect } = require('chai');
-const { version, requirements } = require('proxyquire')('../library/modules/generic', {
+const { version, requirements } = require('proxyquire')('./generic', {
     './shell-execution': execution
 });
 

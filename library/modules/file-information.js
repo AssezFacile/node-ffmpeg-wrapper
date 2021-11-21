@@ -1,4 +1,6 @@
-const { AudioInformation, VideoInformation, FileInformation } = require('../models/file-information');
+const { AudioInformation } = require('../models/audio-information');
+const { FileInformation } = require('../models/file-information');
+const { VideoInformation } = require('../models/video-information');
 
 const extractInfo = (info, regex, extension) => {
     const result = regex.exec(info) || [];

@@ -2,14 +2,15 @@ const fs = {};
 const execution = {};
 
 const { assert, expect } = require('chai');
-const { FileInformation } = require('../library/models/file-information');
-const { FFmpeg } = require('proxyquire')('../library/modules/ffmpeg', {
+const { FileInformation } = require('./models/file-information');
+const { FFmpeg } = require('proxyquire')('./ffmpeg', {
     'fs': fs,
-    './shell-execution': execution,
+    './modules/shell-execution': execution,
 });
 
 const aAudioFile = 'test.wav';
 const aVideoFile = 'test.mp4';
+const aImageFile = 'test.png';
 const aSourceFfProbeResult = `ffprobe version 4.3.1-4ubuntu1 Copyright (c) 2007-2020 the FFmpeg developers
 built with gcc 10 (Ubuntu 10.2.0-9ubuntu2)
 configuration: --prefix=/usr --extra-version=4ubuntu1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-avresample --disable-filter=resample --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-nvenc --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
@@ -248,6 +249,36 @@ describe('ffmpeg', () => {
 
             assert.instanceOf(result, FFmpeg);
             assert.strictEqual(result.source.indexOf('.mp3') > -1, true);
+        });
+    });
+
+    describe('when set image as icon', () => {
+        beforeEach(() => {
+            fs.existsSync = () => true;
+            execution.execute = () => Promise.resolve('ok');
+        });
+
+        it('should return an instance of FFmpeg', async () => {
+            const ffmpeg = new FFmpeg(aVideoFile);
+            const result = await ffmpeg.setIcon(aImageFile);
+
+            assert.instanceOf(result, FFmpeg);
+            assert.strictEqual(result.source.indexOf('.mp4') > -1, true);
+        });
+    });
+
+    describe('when set image as watermark', () => {
+        beforeEach(() => {
+            fs.existsSync = () => true;
+            execution.execute = () => Promise.resolve('ok');
+        });
+
+        it('should return an instance of FFmpeg', async () => {
+            const ffmpeg = new FFmpeg(aVideoFile);
+            const result = await ffmpeg.setWatermark(aImageFile);
+
+            assert.instanceOf(result, FFmpeg);
+            assert.strictEqual(result.source.indexOf('.mp4') > -1, true);
         });
     });
 });

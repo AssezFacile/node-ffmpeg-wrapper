@@ -1,5 +1,5 @@
-const { FileInformation } = require('../library/models/file-information');
-const { buildShellCommand, convertShellInformation } = require('../library/modules/file-information');
+const { FileInformation } = require('../models/file-information');
+const { buildShellCommand, convertShellInformation } = require('./file-information');
 const { assert } = require('chai');
 
 const anAudioFile = 'test.wav';

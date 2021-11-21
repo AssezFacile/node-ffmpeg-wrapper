@@ -1,11 +1,13 @@
 const {
     convertCodecShellCommand, changeSizeShellCommand,
-    extractShellCommand, removeAudioShellCommand
-} = require('../library/modules/video');
+    extractShellCommand, removeAudioShellCommand,
+    setWatermarkShellCommand
+} = require('./video');
 const { assert } = require('chai');
 
 const aSourceFile = 'test.mp4';
 const aDestinationFile = 'convert.mp4';
+const aThumbnailFile = 'image.png';
 
 describe('video', () => {
     describe('when building a ffmpeg command to convert video codec', () => {
@@ -101,6 +103,18 @@ describe('video', () => {
             assert.strictEqual(command[0], 'ffmpeg');
             assert.strictEqual(command[5], aSourceFile);
             assert.strictEqual(command[8], aDestinationFile);
+        });
+    });
+
+    describe('when building a ffmpeg command to set watermark', () => {
+        it('with all source value should return an array with 11 string', () => {
+            const command = setWatermarkShellCommand(aSourceFile, aDestinationFile, aThumbnailFile);
+
+            assert.strictEqual(command.length, 11);
+            assert.strictEqual(command[0], 'ffmpeg');
+            assert.strictEqual(command[5], aSourceFile);
+            assert.strictEqual(command[7], aThumbnailFile);
+            assert.strictEqual(command[10], aDestinationFile);
         });
     });
 });

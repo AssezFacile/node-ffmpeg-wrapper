@@ -1,7 +1,7 @@
 const {
     volumeShellCommand, convertCodecShellCommand,
     removeVideoShellCommand
-} = require('../library/modules/audio');
+} = require('./audio');
 const { assert } = require('chai');
 
 const aSourceFile = 'test.wav';

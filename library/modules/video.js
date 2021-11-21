@@ -41,3 +41,13 @@ exports.removeAudioShellCommand = (srcPathFile, destPathFile) => {
         destPathFile
     ];
 };
+
+exports.setWatermarkShellCommand = (srcPathFile, destPathFile, srcWatermark, position) => {
+    return [
+        'ffmpeg', '-y', '-v', 'error',
+        '-i', srcPathFile,
+        '-i', srcWatermark,
+        '-filter_complex', position,
+        destPathFile
+    ];
+};

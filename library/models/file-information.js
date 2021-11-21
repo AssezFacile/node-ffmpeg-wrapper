@@ -1,24 +1,5 @@
-class AudioInformation {
-    stream = '';
-    codec = '';
-    bitrate = '';
-    samplingRate = '';
-    channels = '';
-
-    constructor() { }
-}
-
-class VideoInformation {
-    stream = '';
-    codec = '';
-    bitrate = '';
-    resolution = '';
-    pixel = '';
-    aspect = '';
-    fps = '';
-
-    constructor() { }
-};
+const { AudioInformation } = require('./audio-information');
+const { VideoInformation } = require('./video-information');
 
 class FileInformation {
     from = '';
@@ -31,6 +12,4 @@ class FileInformation {
     constructor() { }
 };
 
-exports.AudioInformation = AudioInformation;
-exports.VideoInformation = VideoInformation;
 exports.FileInformation = FileInformation;

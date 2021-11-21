@@ -1,11 +1,12 @@
 // Uncomment to test the local library
-//const { ffmpeg, FFmpeg } = require('../index');
+const { ffmpeg, FFmpeg } = require('../index');
 // Uncomment to test the repository library
-const { ffmpeg, FFmpeg } = require('@assezfacile/ffmpeg-wrapper');
+//const { ffmpeg, FFmpeg } = require('@assezfacile/ffmpeg-wrapper');
 
 // Finally, uncomment the method you want to try
 const audio = `${__dirname}/audio.mp3`;
 const video = `${__dirname}/video.mp4`;
+const image = `${__dirname}/image.png`;
 
 /* Get library version *//*
 console.log(ffmpeg.version());
@@ -81,6 +82,12 @@ new FFmpeg(video).convertVideo('.webm').then((infos) => {
 new FFmpeg(video).changeSize('1280x720').then((infos) => {
     console.log(infos);
 });
+new FFmpeg(video).changeSize([1280, 720]).then((infos) => {
+    console.log(infos);
+});
+new FFmpeg(video).changeSize({ width: 1280, height: 720 }).then((infos) => {
+    console.log(infos);
+});
 */
 
 /* Extract part of video */
@@ -111,6 +118,23 @@ new FFmpeg(video).multiple(
     ['convertAudioToStandardOggFormat'],
     ['save', `${__dirname}/output.mkv`]
 ).then((infos) => {
+    console.log(infos);
+});
+*/
+
+/* Add image as icon on file */
+/*
+new FFmpeg(video).setIcon(image).then((infos) => {
+    console.log(infos);
+});
+*/
+
+/* Add image as watermark on video */
+/*
+new FFmpeg(video).setWatermark(image, 'top-right', {
+    width: 64,
+    height: 64,
+}).then((infos) => {
     console.log(infos);
 });
 */
